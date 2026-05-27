@@ -19,6 +19,14 @@ The **Odoo Procurement Automator** is a python ingestion pipeline. It acts as an
 
 ---
 
+## Stock Status Plot
+
+Below is the static inventory audit chart generated automatically by the pipeline. It compares the current quantities of critical hardware components against their safety stock thresholds:
+
+![Stock Status Plot](output/stock_status_plot.png)
+
+---
+
 ## Directory Structure
 
 ```text
