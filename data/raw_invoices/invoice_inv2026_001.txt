@@ -1,0 +1,22 @@
+=========================================================
+               SILICON VALLEY QUANTUM PARTS INC.
+=========================================================
+Invoice Number: INV-2026-001
+Date: May 25, 2026
+Ship To: QuantumDiamonds HQ, Berlin, Germany
+
+Purchased Items:
+---------------------------------------------------------
+Item Code       Description                  Qty    Price
+---------------------------------------------------------
+QD-CHIP-99X     Quantum Diamond Proc X99     10     $1,250.00
+QD-LASER-UV     UV Green excitation Laser    5      $4,200.00
+QD-MCU-STM      STM32F7 Control Board        30     $45.00
+---------------------------------------------------------
+Subtotal: $35,150.00
+Tax (19%): $6,678.50
+Total Amount Due: $41,828.50
+
+Payment Terms: Net 30
+Thank you for your business!
+=========================================================

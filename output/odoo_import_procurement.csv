@@ -1,0 +1,10 @@
+product_id/default_code,product_id/name,product_qty,price_unit,uom_id,source_document
+QD-CHIP-99X,Quantum Diamond Proc X99,10,1250.0,pcs,invoice_inv2026_001.txt
+QD-LASER-UV,UV Green excitation Laser,5,4200.0,pcs,invoice_inv2026_001.txt
+QD-MCU-STM,STM32F7 Control Board,30,45.0,pcs,invoice_inv2026_001.txt
+QD-SENS-881,High-Precision Magnetic Flux Sensor Unit,15,0.0,pcs,shipping_manifest_m2026_09.html
+QD-MW-AMP,Microwave RF Signal Amplifier 2.8GHz,5,0.0,pcs,shipping_manifest_m2026_09.html
+QD-FIBER-COL,Fiber-optic Laser Collimator Assembly,8,0.0,pcs,shipping_manifest_m2026_09.html
+QD-SENS-881,High-Precision Magnetic Flux Sensor,5,250.0,pcs,supplier_invoice_inv2026_002.csv
+QD-MW-AMP,Microwave RF Signal Amplifier 2.8GHz,3,1500.0,pcs,supplier_invoice_inv2026_002.csv
+QD-CHIP-99X,Quantum Diamond Processor Unit X99,2,1250.0,pcs,supplier_invoice_inv2026_002.csv

@@ -1,0 +1,76 @@
+{
+  "odoo_import_data": [
+    {
+      "product_id/default_code": "QD-CHIP-99X",
+      "product_id/name": "Quantum Diamond Proc X99",
+      "product_qty": 10,
+      "price_unit": 1250.0,
+      "uom_id": "pcs",
+      "source_document": "invoice_inv2026_001.txt"
+    },
+    {
+      "product_id/default_code": "QD-LASER-UV",
+      "product_id/name": "UV Green excitation Laser",
+      "product_qty": 5,
+      "price_unit": 4200.0,
+      "uom_id": "pcs",
+      "source_document": "invoice_inv2026_001.txt"
+    },
+    {
+      "product_id/default_code": "QD-MCU-STM",
+      "product_id/name": "STM32F7 Control Board",
+      "product_qty": 30,
+      "price_unit": 45.0,
+      "uom_id": "pcs",
+      "source_document": "invoice_inv2026_001.txt"
+    },
+    {
+      "product_id/default_code": "QD-SENS-881",
+      "product_id/name": "High-Precision Magnetic Flux Sensor Unit",
+      "product_qty": 15,
+      "price_unit": 0.0,
+      "uom_id": "pcs",
+      "source_document": "shipping_manifest_m2026_09.html"
+    },
+    {
+      "product_id/default_code": "QD-MW-AMP",
+      "product_id/name": "Microwave RF Signal Amplifier 2.8GHz",
+      "product_qty": 5,
+      "price_unit": 0.0,
+      "uom_id": "pcs",
+      "source_document": "shipping_manifest_m2026_09.html"
+    },
+    {
+      "product_id/default_code": "QD-FIBER-COL",
+      "product_id/name": "Fiber-optic Laser Collimator Assembly",
+      "product_qty": 8,
+      "price_unit": 0.0,
+      "uom_id": "pcs",
+      "source_document": "shipping_manifest_m2026_09.html"
+    },
+    {
+      "product_id/default_code": "QD-SENS-881",
+      "product_id/name": "High-Precision Magnetic Flux Sensor",
+      "product_qty": 5,
+      "price_unit": 250.0,
+      "uom_id": "pcs",
+      "source_document": "supplier_invoice_inv2026_002.csv"
+    },
+    {
+      "product_id/default_code": "QD-MW-AMP",
+      "product_id/name": "Microwave RF Signal Amplifier 2.8GHz",
+      "product_qty": 3,
+      "price_unit": 1500.0,
+      "uom_id": "pcs",
+      "source_document": "supplier_invoice_inv2026_002.csv"
+    },
+    {
+      "product_id/default_code": "QD-CHIP-99X",
+      "product_id/name": "Quantum Diamond Processor Unit X99",
+      "product_qty": 2,
+      "price_unit": 1250.0,
+      "uom_id": "pcs",
+      "source_document": "supplier_invoice_inv2026_002.csv"
+    }
+  ]
+}

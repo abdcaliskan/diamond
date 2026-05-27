@@ -1,0 +1,44 @@
+{
+  "QD-CHIP-99X": {
+    "name": "Quantum Diamond Processor Unit X99",
+    "stock": 78,
+    "safety_stock": 50,
+    "unit": "pcs",
+    "category": "Processors"
+  },
+  "QD-SENS-881": {
+    "name": "High-Precision Magnetic Flux Sensor",
+    "stock": 72,
+    "safety_stock": 30,
+    "unit": "pcs",
+    "category": "Sensors"
+  },
+  "QD-LASER-UV": {
+    "name": "Ultraviolet Green excitation Laser (532nm)",
+    "stock": 30,
+    "safety_stock": 15,
+    "unit": "pcs",
+    "category": "Optics"
+  },
+  "QD-MW-AMP": {
+    "name": "Microwave RF Signal Amplifier 2.8GHz",
+    "stock": 32,
+    "safety_stock": 20,
+    "unit": "pcs",
+    "category": "RF Components"
+  },
+  "QD-FIBER-COL": {
+    "name": "Fiber-optic Laser Collimator",
+    "stock": 79,
+    "safety_stock": 40,
+    "unit": "pcs",
+    "category": "Optics"
+  },
+  "QD-MCU-STM": {
+    "name": "STM32F7 Control Microcontroller Board",
+    "stock": 101,
+    "safety_stock": 25,
+    "unit": "pcs",
+    "category": "Controllers"
+  }
+}

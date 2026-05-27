@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odoo Procurement Automator | Dashboard</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --primary: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
+                              radial-gradient(circle at 90% 80%, rgba(239, 68, 68, 0.05) 0%, transparent 40%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 1rem;
+        }
+        
+        .header-title h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #06b6d4, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header-title p {
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            font-size: 0.95rem;
+        }
+        
+        .punchline-badge {
+            background: rgba(6, 182, 212, 0.15);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (min-width: 1024px) {
+            .grid {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        /* Alert Widgets */
+        .alerts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .alert-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-radius: 12px;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+        
+        .alert-item.warning {
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            color: #fcd34d;
+        }
+        
+        .alert-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .alert-sku {
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+        
+        .alert-name {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        
+        .alert-numbers {
+            text-align: right;
+        }
+        
+        .alert-qty {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .alert-limit {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+        
+        /* Table styles */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        
+        th {
+            color: var(--text-muted);
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+        
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-critical { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
+        .badge-warning { background: rgba(245, 158, 11, 0.15); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-restocked { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .badge-ok { background: rgba(6, 182, 212, 0.15); color: var(--primary); border: 1px solid rgba(6, 182, 212, 0.3); }
+        
+        /* Download links */
+        .actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            border: none;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            box-shadow: none;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: none;
+        }
+        
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--card-border);
+            padding-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <h1>Odoo Procurement Automator</h1>
+            <p>Data validation and ingestion pipeline for Odoo ERP systems</p>
+        </div>
+        <div class="punchline-badge">
+            "I don't enter supply chain data manually, I secure data quality with code."
+        </div>
+    </header>
+
+    <div class="grid">
+        <!-- Stock Chart Card -->
+        <div class="card">
+            <div class="card-title">
+                <span>Inventory Audit Plot</span>
+                <div class="actions">
+                    <a href="odoo_import_procurement.csv" class="btn" download>Download Odoo CSV</a>
+                    <a href="odoo_import_procurement.json" class="btn btn-secondary" download>Download Odoo JSON</a>
+                </div>
+            </div>
+            <div style="position: relative; height: 350px; width: 100%;">
+                <canvas id="stockChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Low Stock Alerts Card -->
+        <div class="card">
+            <div class="card-title">
+                <span>Low Stock Alerts</span>
+                <span class="badge badge-critical">0 warnings</span>
+            </div>
+            <div class="alerts-container">
+                <div style="color: var(--success); text-align: center; padding: 2rem;">No low stock alerts detected. All items fully restocked!</div>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="grid" style="grid-template-columns: 1fr;">
+        <!-- Processed Shipment Items Table -->
+        <div class="card">
+            <div class="card-title">Processed Procurement Log</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>SKU</th>
+                            <th>Description</th>
+                            <th>Qty Received</th>
+                            <th>Initial Stock</th>
+                            <th>New Stock</th>
+                            <th>Min Safety</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr>
+                            <td style="font-weight: 600; color: var(--primary);">QD-CHIP-99X</td>
+                            <td>Quantum Diamond Processor Unit X99</td>
+                            <td style="font-weight: 600;">+12</td>
+                            <td style="color: var(--text-muted);">66</td>
+                            <td style="font-weight: 600; color: var(--text-main)">78</td>
+                            <td>50</td>
+                            <td>
+                                <span class="badge badge-ok">OK</span>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td style="font-weight: 600; color: var(--primary);">QD-SENS-881</td>
+                            <td>High-Precision Magnetic Flux Sensor</td>
+                            <td style="font-weight: 600;">+20</td>
+                            <td style="color: var(--text-muted);">52</td>
+                            <td style="font-weight: 600; color: var(--text-main)">72</td>
+                            <td>30</td>
+                            <td>
+                                <span class="badge badge-ok">OK</span>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td style="font-weight: 600; color: var(--primary);">QD-LASER-UV</td>
+                            <td>Ultraviolet Green excitation Laser (532nm)</td>
+                            <td style="font-weight: 600;">+5</td>
+                            <td style="color: var(--text-muted);">25</td>
+                            <td style="font-weight: 600; color: var(--text-main)">30</td>
+                            <td>15</td>
+                            <td>
+                                <span class="badge badge-ok">OK</span>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td style="font-weight: 600; color: var(--primary);">QD-MW-AMP</td>
+                            <td>Microwave RF Signal Amplifier 2.8GHz</td>
+                            <td style="font-weight: 600;">+8</td>
+                            <td style="color: var(--text-muted);">24</td>
+                            <td style="font-weight: 600; color: var(--text-main)">32</td>
+                            <td>20</td>
+                            <td>
+                                <span class="badge badge-ok">OK</span>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td style="font-weight: 600; color: var(--primary);">QD-FIBER-COL</td>
+                            <td>Fiber-optic Laser Collimator</td>
+                            <td style="font-weight: 600;">+8</td>
+                            <td style="color: var(--text-muted);">71</td>
+                            <td style="font-weight: 600; color: var(--text-main)">79</td>
+                            <td>40</td>
+                            <td>
+                                <span class="badge badge-ok">OK</span>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td style="font-weight: 600; color: var(--primary);">QD-MCU-STM</td>
+                            <td>STM32F7 Control Microcontroller Board</td>
+                            <td style="font-weight: 600;">+30</td>
+                            <td style="color: var(--text-muted);">71</td>
+                            <td style="font-weight: 600; color: var(--text-main)">101</td>
+                            <td>25</td>
+                            <td>
+                                <span class="badge badge-ok">OK</span>
+                            </td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top: 1.5rem;">
+        <div class="card-title">Parsed Raw Files Summary</div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>SKU</th>
+                        <th>Product Description</th>
+                        <th>Extracted Qty</th>
+                        <th>Extracted Price</th>
+                        <th>Source File Reference</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td style="font-weight: 600;">QD-CHIP-99X</td>
+                        <td>Quantum Diamond Proc X99</td>
+                        <td>10</td>
+                        <td>$1250.00</td>
+                        <td style="color: var(--primary); font-family: monospace;">invoice_inv2026_001.txt</td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="font-weight: 600;">QD-LASER-UV</td>
+                        <td>UV Green excitation Laser</td>
+                        <td>5</td>
+                        <td>$4200.00</td>
+                        <td style="color: var(--primary); font-family: monospace;">invoice_inv2026_001.txt</td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="font-weight: 600;">QD-MCU-STM</td>
+                        <td>STM32F7 Control Board</td>
+                        <td>30</td>
+                        <td>$45.00</td>
+                        <td style="color: var(--primary); font-family: monospace;">invoice_inv2026_001.txt</td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="font-weight: 600;">QD-SENS-881</td>
+                        <td>High-Precision Magnetic Flux Sensor Unit</td>
+                        <td>15</td>
+                        <td>$0.00</td>
+                        <td style="color: var(--primary); font-family: monospace;">shipping_manifest_m2026_09.html</td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="font-weight: 600;">QD-MW-AMP</td>
+                        <td>Microwave RF Signal Amplifier 2.8GHz</td>
+                        <td>5</td>
+                        <td>$0.00</td>
+                        <td style="color: var(--primary); font-family: monospace;">shipping_manifest_m2026_09.html</td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="font-weight: 600;">QD-FIBER-COL</td>
+                        <td>Fiber-optic Laser Collimator Assembly</td>
+                        <td>8</td>
+                        <td>$0.00</td>
+                        <td style="color: var(--primary); font-family: monospace;">shipping_manifest_m2026_09.html</td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="font-weight: 600;">QD-SENS-881</td>
+                        <td>High-Precision Magnetic Flux Sensor</td>
+                        <td>5</td>
+                        <td>$250.00</td>
+                        <td style="color: var(--primary); font-family: monospace;">supplier_invoice_inv2026_002.csv</td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="font-weight: 600;">QD-MW-AMP</td>
+                        <td>Microwave RF Signal Amplifier 2.8GHz</td>
+                        <td>3</td>
+                        <td>$1500.00</td>
+                        <td style="color: var(--primary); font-family: monospace;">supplier_invoice_inv2026_002.csv</td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="font-weight: 600;">QD-CHIP-99X</td>
+                        <td>Quantum Diamond Processor Unit X99</td>
+                        <td>2</td>
+                        <td>$1250.00</td>
+                        <td style="color: var(--primary); font-family: monospace;">supplier_invoice_inv2026_002.csv</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="footer">
+        Odoo Procurement Automator &copy; 2026. Hardware Supply Chain Pipeline.
+    </div>
+
+    <!-- Chart Configuration Script -->
+    <script>
+        const ctx = document.getElementById('stockChart').getContext('2d');
+        const labels = ["QD-CHIP-99X", "QD-SENS-881", "QD-LASER-UV", "QD-MW-AMP", "QD-FIBER-COL", "QD-MCU-STM"];
+        
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Current Stock Level',
+                        data: [78, 72, 30, 32, 79, 101],
+                        backgroundColor: ["rgba(6, 182, 212, 0.8)", "rgba(6, 182, 212, 0.8)", "rgba(6, 182, 212, 0.8)", "rgba(6, 182, 212, 0.8)", "rgba(6, 182, 212, 0.8)", "rgba(6, 182, 212, 0.8)"],
+                        borderRadius: 6,
+                        borderWidth: 0
+                    },
+                    {
+                        label: 'Min Safety Threshold',
+                        data: [50, 30, 15, 20, 40, 25],
+                        type: 'line',
+                        borderColor: '#9ca3af',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        fill: false,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#9ca3af'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#e5e7eb',
+                            font: {
+                                family: "'Outfit', sans-serif"
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        },
+                        ticks: {
+                            color: '#9ca3af',
+                            font: {
+                                family: "'Outfit', sans-serif"
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#9ca3af',
+                            font: {
+                                family: "'Outfit', sans-serif"
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
